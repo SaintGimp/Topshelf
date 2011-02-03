@@ -155,5 +155,17 @@ namespace Topshelf.Configuration.Dsl
         /// </summary>
         /// <param name="timeout">The wait timeout</param>
         void SetEventTimeout(TimeSpan timeout);
+
+        /// <summary>
+        /// Defines an action to perform after installing the services.
+        /// </summary>
+        /// <param name="action">The action that will be performed after the services are installed.</param>
+        void AfterInstallingServices(Action action);
+
+        /// <summary>
+        /// Defines an action to perform after uninstalling the services.
+        /// </summary>
+        /// <param name="action">The action that will be performed after the services are uninstalled.</param>
+        void AfterUninstallingServices(Action action);
     }
 }

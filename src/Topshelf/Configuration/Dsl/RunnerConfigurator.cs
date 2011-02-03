@@ -120,7 +120,17 @@ namespace Topshelf.Configuration.Dsl
 			_timeout = timeout;
 		}
 
-		/// <summary>
+        public void AfterInstallingServices(Action action)
+        {
+            _winServiceSettings.AfterInstallAction = action;
+        }
+
+        public void AfterUninstallingServices(Action action)
+        {
+            _winServiceSettings.AfterUninstallAction = action;
+        }
+
+        /// <summary>
 		///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
 		public void Dispose()

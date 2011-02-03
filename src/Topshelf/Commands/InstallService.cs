@@ -78,9 +78,8 @@ namespace Topshelf.Commands
 				return;
 			}
 
-
 			var installer = new HostServiceInstaller(_settings);
-			WinServiceHelper.Register(_settings.ServiceName.FullName, installer);
+			WinServiceHelper.Register(_settings.ServiceName.FullName, installer, _settings.AfterInstallAction);
 		}
 
 		#endregion

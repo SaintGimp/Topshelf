@@ -12,7 +12,8 @@
 // specific language governing permissions and limitations under the License.
 namespace Topshelf.WindowsServiceCode
 {
-	using System.Collections;
+    using System;
+    using System.Collections;
 	using System.Configuration.Install;
 	using Configuration;
 	using log4net;
@@ -22,9 +23,7 @@ namespace Topshelf.WindowsServiceCode
 	public class HostServiceInstaller :
 		Installer
 	{
-		static readonly ILog _log = LogManager.GetLogger("Topshelf.WindowsServiceCode.HostServiceInstaller");
 		readonly WinServiceSettings _settings;
-
 
 		public HostServiceInstaller(WinServiceSettings settings)
 		{
@@ -39,13 +38,7 @@ namespace Topshelf.WindowsServiceCode
 		{
 			Installers.AddRange(WinServiceHelper.BuildInstallers(_settings));
 
-			if (_log.IsInfoEnabled)
-				_log.InfoFormat("Installing Service {0}", _settings.ServiceName.FullName);
-
 			base.Install(stateSaver);
-
-			if (_log.IsDebugEnabled)
-				_log.Debug("Opening Registry");
 
 			using (RegistryKey system = Registry.LocalMachine.OpenSubKey("System"))
 			using (RegistryKey currentControlSet = system.OpenSubKey("CurrentControlSet"))
@@ -56,18 +49,11 @@ namespace Topshelf.WindowsServiceCode
 
 				var imagePath = (string)service.GetValue("ImagePath");
 
-				_log.DebugFormat("Service Path {0}", imagePath);
-
 				imagePath += _settings.ImagePath;
-
-				_log.DebugFormat("ImagePath '{0}'", imagePath);
 
 				service.SetValue("ImagePath", imagePath);
 			}
-
-			if (_log.IsDebugEnabled)
-				_log.Debug("Closing Registry");
-		}
+        }
 
 		public override void Uninstall(IDictionary savedState)
 		{

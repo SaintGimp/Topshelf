@@ -23,8 +23,6 @@ namespace Topshelf.WindowsServiceCode
 
 	public static class WinServiceHelper
     {
-        static readonly ILog _log = LogManager.GetLogger("Topshelf.WindowsServiceCode.WinServiceHelper");
-
         public static Installer[] BuildInstallers(WinServiceSettings settings)
         {
             var result = new Installer[]
@@ -65,7 +63,8 @@ namespace Topshelf.WindowsServiceCode
 
         public static void Register(string fullServiceName, HostServiceInstaller installer, Action afterInstallAction)
         {
-            _log.DebugFormat("Attempting to install '{0}'", fullServiceName);
+            Console.WriteLine("[TopShelf] Attempting to install '{0}'.", fullServiceName);
+
             if (!IsInstalled(fullServiceName))
             {
                 using (var ti = new TransactedInstaller())
@@ -93,13 +92,13 @@ namespace Topshelf.WindowsServiceCode
             }
             else
             {
-                    _log.Info("Service is already installed");
+                Console.WriteLine("[TopShelf] Service is already installed.");
             }
         }
 
         public static void Unregister(string fullServiceName, HostServiceInstaller installer, Action afterUninstallAction)
         {
-            _log.DebugFormat("Attempting to uninstall '{0}'", fullServiceName);
+            Console.WriteLine("[TopShelf] Attempting to uninstall '{0}'.", fullServiceName);
 
             if (IsInstalled(fullServiceName))
             {
@@ -126,7 +125,7 @@ namespace Topshelf.WindowsServiceCode
             }
             else
             {
-                _log.Info("Service is not installed");
+                Console.WriteLine("[TopShelf] Service is not installed.");
             }
         }
 

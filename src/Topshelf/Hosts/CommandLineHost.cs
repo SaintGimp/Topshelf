@@ -24,7 +24,6 @@ namespace Topshelf.Hosts
 	public class CommandLineHost :
 		Host
 	{
-		readonly ILog _log = LogManager.GetLogger("Topshelf.Hosts.CommandLineHost");
 		readonly ServiceName _serviceName;
 		IServiceCoordinator _coordinator;
 		ManualResetEvent _exit;
@@ -41,21 +40,19 @@ namespace Topshelf.Hosts
 
 			try
 			{
-				_log.Debug("Starting up as a console application");
-
 				_exit = new ManualResetEvent(false);
 
 				Console.CancelKeyPress += HandleCancelKeyPress;
 
 				_coordinator.Start(); //user code starts
 
-				_log.InfoFormat("[Topshelf] Running, press Control+C to exit.");
+                Console.WriteLine("[TopShelf] Running, press Control+C to exit.");
 
 				_exit.WaitOne();
 			}
 			catch (Exception ex)
 			{
-				_log.Error("An exception occurred", ex);
+                Console.WriteLine("[TopShelf] An exception occurred:\n{0}", ex);
 			}
 			finally
 			{
@@ -69,20 +66,20 @@ namespace Topshelf.Hosts
 		{
 			try
 			{
-				_log.Info("[Topshelf] Stopping");
+                Console.WriteLine("[TopShelf] Stopping...");
 
 				_coordinator.Stop();
 			}
 			catch (Exception ex)
 			{
-				_log.Error("The service did not shut down gracefully", ex);
+                Console.WriteLine("[TopShelf] The service did not shut down gracefully:\n{0}", ex);
 			}
 			finally
 			{
 				_coordinator.Dispose();
 				_coordinator = null;
 
-				_log.Info("[Topshelf] Stopped");
+                Console.WriteLine("[TopShelf] Stopped.");
 			}
 		}
 
@@ -90,11 +87,11 @@ namespace Topshelf.Hosts
 		{
 			if (consoleCancelEventArgs.SpecialKey == ConsoleSpecialKey.ControlBreak)
 			{
-				_log.Error("Control+Break detected, terminating service (not cleanly, use Control+C to exit cleanly)");
+                Console.WriteLine("[TopShelf] Control+Break detected, terminating service (not cleanly, use Control+C to exit cleanly).");
 				return;
 			}
 
-			_log.Info("Control+C detected, exiting.");
+            Console.WriteLine("[TopShelf] Control+C detected, exiting.");
 			_exit.Set();
 
 			consoleCancelEventArgs.Cancel = true;
@@ -103,7 +100,7 @@ namespace Topshelf.Hosts
 		void CheckToSeeIfWinServiceRunning()
 		{
 			if (ServiceController.GetServices().Where(s => s.ServiceName == _serviceName.FullName).Any())
-				_log.WarnFormat("There is an instance of this {0} running as a windows service", _serviceName);
+                Console.WriteLine("[TopShelf] Warning: there is an instance of {0} already running as a windows service.", _serviceName.FullName);
 		}
 	}
 }

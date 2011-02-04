@@ -24,8 +24,6 @@ namespace Topshelf.Commands
 	public class InstallService :
 		Command
 	{
-		static readonly ILog _log = LogManager.GetLogger("Topshelf.Commands.InstallService");
-
 		readonly WinServiceSettings _settings;
 		string _commandLine;
 
@@ -46,8 +44,8 @@ namespace Topshelf.Commands
 		{
 			if (WinServiceHelper.IsInstalled(_settings.ServiceName.FullName))
 			{
-				string message = string.Format("The {0} service has already been installed.", _settings.ServiceName.FullName);
-				_log.Error(message);
+                string message = string.Format("[TopShelf] The {0} service has already been installed.", _settings.ServiceName.FullName);
+				Console.WriteLine(message);
 
 				return;
 			}
@@ -70,11 +68,11 @@ namespace Topshelf.Commands
 					}
 					catch (Win32Exception ex)
 					{
-						_log.Debug("Process Start Exception", ex);
+                        Console.WriteLine(@"[TopShelf] Process start exception:\n{0}", ex);
 					}
 				}
 
-				_log.ErrorFormat("The {0} service can only be installed as an administrator", _settings.ServiceName.FullName);
+                Console.WriteLine("[TopShelf] The {0} service can only be installed as an administrator.", _settings.ServiceName.FullName);
 				return;
 			}
 

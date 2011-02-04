@@ -147,7 +147,7 @@ namespace Topshelf.Model
 
 				callback(_instance);
 
-				_log.InfoFormat("[{0}] {1} complete", Name, text);
+                _log.DebugFormat("[{0}] {1} complete", Name, text);
 
 				Publish<TComplete>();
 			}

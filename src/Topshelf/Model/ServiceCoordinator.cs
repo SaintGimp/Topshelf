@@ -375,7 +375,7 @@ namespace Topshelf.Model
 			if (action != null)
 				action(this);
 
-			_log.InfoFormat("[Topshelf] {0} complete", name);
+            _log.DebugFormat("[Topshelf] {0} complete", name);
 		}
 	}
 }

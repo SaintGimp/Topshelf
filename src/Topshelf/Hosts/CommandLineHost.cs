@@ -99,7 +99,7 @@ namespace Topshelf.Hosts
 
 		void CheckToSeeIfWinServiceRunning()
 		{
-			if (ServiceController.GetServices().Where(s => s.ServiceName == _serviceName.FullName).Any())
+			if (ServiceController.GetServices().Where(s => s.ServiceName == _serviceName.FullName && s.Status != ServiceControllerStatus.Stopped).Any())
                 Console.WriteLine("[TopShelf] Warning: there is an instance of {0} already running as a windows service.", _serviceName.FullName);
 		}
 	}
